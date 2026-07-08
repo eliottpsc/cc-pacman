@@ -1,0 +1,19 @@
+# Maze width and height (1-100)
+WIDTH=20
+HEIGHT=20
+
+# Entry and exit points, must be inside the maze format: x, y
+ENTRY=0,1
+EXIT=19,8
+
+# File to write the maze to
+OUTPUT_FILE=maze
+
+# True if the maze should be perfect (one single spanning tree)
+PERFECT=True
+
+# The seed used to generate the maze, leave the value empty to use a random seed
+SEED=
+
+# The method used to display the maze (ASCII or PYGAME)
+DISPLAY=ASCII
