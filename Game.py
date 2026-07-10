@@ -1,11 +1,12 @@
 from time import sleep
 from dataclasses import dataclass
-from typing import Self
+from typing import Never, Self
 import pygame
 
 from Config import Config
 from Events import Events
 from Maze import Maze
+from Menu import Menu
 from Pac import Pac
 
 
@@ -33,25 +34,33 @@ class Game:
         pygame.display.set_caption("pac-man")
         pygame.font.init()
 
-
-    def menu_loop(self):
-        ...
-
-    def level_loop(self):
+    def menu_loop(self) -> Never:
         pac = Pac(self)
-        maze = Maze(self)
         ev = Events(self, pac)
+        menu = Menu(self)
+        while True:
+            menu.draw()  # draw before ev.get() because draw() populates
+            # the dict ev.get() uses
+            ev.get()
+            menu.get_event()
+
+            pygame.display.flip()
+
+    def level_loop(self) -> Never:
+        pac: Pac = Pac(self)
+        maze: Maze = Maze(self)
+        ev: Events = Events(self, pac)
         pac.create()
         while True:
             ev.get()
             ev.check_held_keys()
 
-            self.screen.fill((0, 0, 0))
+            _ = self.screen.fill((0, 0, 0))
 
             maze.draw_grid()
             pac.update()
 
             pygame.display.flip()
 
-    def hiscores_loop(self):
+    def hiscores_loop(self) -> None:
         ...

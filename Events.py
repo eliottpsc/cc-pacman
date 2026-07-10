@@ -3,11 +3,13 @@ import pygame
 
 from Pac import Pac
 
+
 class Events():
     def __init__(self, game, pac: Pac) -> None:
         self.screen: pygame.Surface = game.screen
         self.pac: Pac = pac
         self.held_keys: list[str] = []
+        self.game = game
 
     def get(self) -> None:
         for event in pygame.event.get():
@@ -22,6 +24,8 @@ class Events():
                     self.held_keys.append('up')
                 if event.key == pygame.K_DOWN:
                     self.held_keys.append('down')
+                if event.key == pygame.K_ESCAPE:
+                    self.game.menu_loop()
                 if event.key == pygame.K_q:
                     pygame.quit()
                     exit()
