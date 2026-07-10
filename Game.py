@@ -1,10 +1,10 @@
+import sys
+import pygame
 from time import sleep
 from dataclasses import dataclass
 from typing import Self
-import pygame
 
 from Config import Config
-from Events import Events
 from Maze import Maze
 from Pac import Pac
 
@@ -40,16 +40,18 @@ class Game:
     def level_loop(self):
         pac = Pac(self)
         maze = Maze(self)
-        ev = Events(self, pac)
         pac.create()
         while True:
-            ev.get()
-            ev.check_held_keys()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sys.exit()
+
+            keys = pygame.key.get_pressed()
 
             self.screen.fill((0, 0, 0))
 
             maze.draw_grid()
-            pac.update()
+            pac.update(keys)
 
             pygame.display.flip()
 
