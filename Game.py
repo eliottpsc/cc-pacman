@@ -38,8 +38,7 @@ class Game:
     def menu_loop(self) -> Never:
         menu = Menu(self)
         while True:
-            menu.draw()  # draw before ev.get() because draw() populates
-            # the dict ev.get() uses
+            menu.draw()
             menu.get_event()
 
             pygame.display.flip()

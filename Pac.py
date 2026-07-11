@@ -2,6 +2,7 @@ import pygame
 
 class Pac():
     def __init__(self, game) -> None:
+        self.game = game
         self.screen: pygame.Surface = game.screen
         self.x: float = 0
         self.y: float = 0
@@ -24,5 +25,7 @@ class Pac():
             self.y -= self.speed
         if keys[pygame.K_DOWN]:
             self.y += self.speed
+        if keys[pygame.K_ESCAPE]:
+            self.game.menu_loop()
         self.rect = pygame.Rect(self.x, self.y, 50, 50)
         _ = pygame.draw.rect(self.screen, (220, 200, 0), self.rect, 10)
