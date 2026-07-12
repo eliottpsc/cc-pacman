@@ -8,6 +8,8 @@ class Pac():
         self.row: int = 0
         self.col: int = 0
         self.direction = (1, 0)
+        self.move_timer = 0
+        self.move_delay = 360
         self.speed: float = 0.5
         self.rect = pygame.Rect(self.row, self.col, 50, 50)
         self.create()
@@ -32,7 +34,7 @@ class Pac():
         if dire == (0, 1):
             return walls[2] == "0"
 
-    def update(self, keys):
+    def update(self, keys, dt):
         new_dir = self.direction
         if keys[pygame.K_LEFT]:
             new_dir = (0, -1)
@@ -43,11 +45,13 @@ class Pac():
         if keys[pygame.K_DOWN]:
             new_dir = (1, 0)
 
-        if self.can_move(new_dir):
-            self.direction = new_dir
-            self.row += self.direction[0]
-            self.col += self.direction[1]
+        self.move_timer += dt
+        if self.can_move(new_dir) and self.move_timer >= self.move_delay:
+                self.move_timer = 0
+                self.direction = new_dir
+                self.row += self.direction[0]
+                self.col += self.direction[1]
 
         blocksize = self.game.WINDOW_WIDTH // self.game.conf.width
-        self.rect = pygame.Rect(self.col * blocksize + 2, self.row * blocksize + 2, 50, 50)
+        self.rect = pygame.Rect(self.col * blocksize, self.row * blocksize, 50, 50)
         _ = pygame.draw.rect(self.screen, (220, 200, 0), self.rect, 10)
