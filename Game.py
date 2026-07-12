@@ -37,13 +37,19 @@ class Game:
         pygame.display.set_caption("pac-man")
         pygame.font.init()
 
-    def menu_loop(self) -> Never:
+    def menu_loop(self) -> None:
         menu = Menu(self)
         while True:
+            if menu.running is False:
+                break
             menu.draw()
             menu.get_event()
 
             pygame.display.flip()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
 
     def level_loop(self) -> Never:
         pac: Pac = Pac(self)

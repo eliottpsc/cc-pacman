@@ -10,6 +10,7 @@ class Menu:
         self.rect: pygame.Rect = pygame.Rect(0, 0, self.width, self.height)
         self.game = game
         self.buttons: dict[str, Button] = {}
+        self.running: bool = True
 
     def draw_text(self, text: str, font: pygame.font.Font,
                   color: tuple[int, int, int], x: float, y: float) -> None:
@@ -32,18 +33,22 @@ class Menu:
 
         # BUTTONS
         title = Button(self.rect.centerx, self.rect.centery / 2,
-                       pygame.image.load('assets/title.png'), 2)
+                       pygame.image.load('assets/title.png'), 2.2)
         self.buttons['title'] = title
-        start = Button(self.rect.centerx, self.rect.centery,
+        if self.game.current_play is True:
+            continu = Button(self.rect.centerx, self.rect.centery,
+                             pygame.image.load('assets/continue.png'), 1)
+            self.buttons['continue'] = continu
+        start = Button(self.rect.centerx, self.rect.centery * 1.2,
                        pygame.image.load('assets/start.png'), 1)
         self.buttons['start'] = start
-        settings = Button(self.rect.centerx, self.rect.centery * 1.2,
+        settings = Button(self.rect.centerx, self.rect.centery * 1.4,
                           pygame.image.load('assets/settings.png'), 1)
         self.buttons['settings'] = settings
-        highscores = Button(self.rect.centerx, self.rect.centery * 1.4,
+        highscores = Button(self.rect.centerx, self.rect.centery * 1.6,
                             pygame.image.load('assets/highscores.png'), 1)
         self.buttons['highscores'] = highscores
-        quit = Button(self.rect.centerx, self.rect.centery * 1.6,
+        quit = Button(self.rect.centerx, self.rect.centery * 1.8,
                       pygame.image.load('assets/quit.png'), 1)
         self.buttons['quit'] = quit
 
@@ -52,6 +57,8 @@ class Menu:
 
     def get_event(self) -> None:
         self.buttons['title'].get_click(self.game, lambda: 1)
+        if self.game.current_play is True:
+            self.buttons['continue'].get_click(self.game, lambda: setattr(self, 'running', False))
         self.buttons['start'].get_click(self.game, self.game.level_loop)
         self.buttons['settings'].get_click(self.game, lambda: 1)
         self.buttons['highscores'].get_click(self.game, lambda: 1)
