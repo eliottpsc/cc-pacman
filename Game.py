@@ -9,13 +9,14 @@ from Config import Config
 from Maze import Maze
 from Menu import Menu
 from Pac import Pac
-
+from CurrentPlay import CurrentPlay
 
 @dataclass
 class Game:
 
     screen: pygame.Surface
     conf: Config
+    current_play: bool
 
     WINDOW_WIDTH: int = 1200
     WINDOW_HEIGHT: int = 1200
@@ -25,7 +26,8 @@ class Game:
         game = cls(
             screen=pygame.display.set_mode(
                 (cls.WINDOW_WIDTH, cls.WINDOW_HEIGHT)),
-            conf=Config.load())
+            conf=Config.load(),
+            current_play = False)
         sleep(1)
         game.init()
         return game
@@ -47,6 +49,8 @@ class Game:
         pac: Pac = Pac(self)
         maze: Maze = Maze(self)
         pac.create()
+        current_play = CurrentPlay()
+        self.current_play = current_play.exists
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
