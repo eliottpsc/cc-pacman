@@ -1,10 +1,13 @@
 import pygame
 
 class Pac():
-    def __init__(self, game) -> None:
+    def __init__(self, game, maze) -> None:
+        self.game = game
         self.screen: pygame.Surface = game.screen
-        self.x: float = 0
-        self.y: float = 0
+        self.maze = maze
+        self.x: int = 0
+        self.y: int = 0
+        self.direction = (1, 0)
         self.speed: float = 0.5
         self.rect = pygame.Rect(self.x, self.y, 50, 50)
         self.create()
@@ -15,14 +18,25 @@ class Pac():
     def destroy(self):
         ...
 
+    def can_move(self, dire):
+        return True
+
     def update(self, keys):
+        new_dir = self.direction
         if keys[pygame.K_LEFT]:
-            self.x -= self.speed
+            new_dir = (-1, 0)
         if keys[pygame.K_RIGHT]:
-            self.x += self.speed
+            new_dir = (1, 0)
         if keys[pygame.K_UP]:
-            self.y -= self.speed
+            new_dir = (0, -1)
         if keys[pygame.K_DOWN]:
-            self.y += self.speed
-        self.rect = pygame.Rect(self.x, self.y, 50, 50)
+            new_dir = (0, 1)
+
+        if self.can_move(new_dir):
+            self.direction = new_dir
+            self.x += self.direction[0]
+            self.y += self.direction[1]
+
+        blocksize = 1 #self.game.WINDOW_WIDTH // self.game.conf.width
+        self.rect = pygame.Rect(self.x * blocksize, self.y * blocksize, 50, 50)
         _ = pygame.draw.rect(self.screen, (220, 200, 0), self.rect, 10)

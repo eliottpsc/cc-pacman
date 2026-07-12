@@ -38,8 +38,8 @@ class Game:
         ...
 
     def level_loop(self):
-        pac = Pac(self)
         maze = Maze(self)
+        pac = Pac(self, maze.load())
         pac.create()
         while True:
             for event in pygame.event.get():
