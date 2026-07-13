@@ -7,6 +7,7 @@ from typing import Self
 from Config import Config
 from Maze import Maze
 from Pac import Pac
+from Ghost import Ghost
 
 
 @dataclass
@@ -40,6 +41,7 @@ class Game:
     def level_loop(self):
         maze = Maze(self)
         pac = Pac(self, maze.load())
+        ghost = Ghost(self, maze.load())
         clock = pygame.time.Clock()
         pac.create()
         while True:
@@ -55,6 +57,7 @@ class Game:
 
             dt = clock.tick(60)
             pac.update(keys, dt)
+            ghost.update(dt)
 
             pygame.display.flip()
 
