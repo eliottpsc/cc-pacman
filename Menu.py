@@ -66,3 +66,19 @@ class Menu:
 
     def update(self) -> None:
         ...
+
+
+class MenuSelector():
+    def __init__(self, game) -> None:
+        self.game = game
+        self.screen = game.screen
+        self.selected: Button
+        self.image = pygame.transform.scale(
+            pygame.image.load('assets/menu-select.png'),
+            (40, 40))
+        self.rect = self.image.get_rect()
+        self.rect.centerx = (self.game.WINDOW_HEIGHT / 3.4)
+        self.rect.centery = (self.game.WINDOW_HEIGHT / 2) * 1.2
+        self.rect_right = self.image.get_rect()
+        self.rect_right.centerx = (self.game.WINDOW_HEIGHT / 1.4)
+        self.rect_right.centery = (self.game.WINDOW_HEIGHT / 2) * 1.2
