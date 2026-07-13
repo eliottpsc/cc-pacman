@@ -1,18 +1,11 @@
 import pygame
 import numpy as np
-from numpy import array
+from Entity import Entity
 
-class Pac():
+
+class Pac(Entity):
     def __init__(self, game, maze) -> None:
-        self.game = game
-        self.screen: pygame.Surface = game.screen
-        self.maze = np.array(maze)
-        self.pos = np.array((0, 0))
-        self.direction = np.array((0, 1))
-        self.move_timer = 0
-        self.move_delay = 360
-        self.speed: float = 0.5
-        self.rect = pygame.Rect(*self.pos, 50, 50)
+        super().__init__(game, maze)
         self.create()
 
     def create(self) -> None:
@@ -21,22 +14,8 @@ class Pac():
     def destroy(self):
         ...
 
-    def can_move(self, dire: tuple):
-        if np.any(self.pos < 0) or np.any(self.pos >= self.maze.shape):
-            return False
-        cell = self.maze[*self.pos]
-        walls = format(int(cell, 16), '04b')
-        if dire == (-1, 0):
-            return walls[3] == "0"
-        if dire == (1, 0):
-            return walls[1] == "0"
-        if dire == (0, -1):
-            return walls[0] == "0"
-        if dire == (0, 1):
-            return walls[2] == "0"
-
     def update(self, keys, dt):
-        new_dir: tuple = tuple(self.direction)
+        new_dir= tuple(self.direction)
         if keys[pygame.K_LEFT]:
             new_dir = (0, -1)
         if keys[pygame.K_RIGHT]:
