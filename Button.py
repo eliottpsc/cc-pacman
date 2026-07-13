@@ -4,8 +4,9 @@ import pygame
 
 
 class Button():
-    def __init__(self, x: float, y: float, image: pygame.Surface,
-                 scale: float) -> None:
+    def __init__(self, name: str, x: float, y: float, image: pygame.Surface,
+                 scale: float, func: Callable[..., Any]) -> None:
+        self.name = name
         width = image.get_width()
         height = image.get_height()
         self.image = pygame.transform.scale(
@@ -13,6 +14,7 @@ class Button():
         self.rect = self.image.get_rect()
         self.rect.center = (int(x), int(y))
         self.clicked = False
+        self.func = func
 
     def draw(self, screen: pygame.Surface) -> None:
         _ = screen.blit(self.image, self.rect)
