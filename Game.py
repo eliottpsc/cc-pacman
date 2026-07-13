@@ -38,8 +38,9 @@ class Game:
         ...
 
     def level_loop(self):
-        pac = Pac(self)
         maze = Maze(self)
+        pac = Pac(self, maze.load())
+        clock = pygame.time.Clock()
         pac.create()
         while True:
             for event in pygame.event.get():
@@ -51,7 +52,9 @@ class Game:
             self.screen.fill((0, 0, 0))
 
             maze.draw_grid()
-            pac.update(keys)
+
+            dt = clock.tick(60)
+            pac.update(keys, dt)
 
             pygame.display.flip()
 
