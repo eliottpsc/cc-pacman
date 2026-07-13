@@ -9,8 +9,33 @@ class Menu:
         self.height: float = game.WINDOW_HEIGHT
         self.rect: pygame.Rect = pygame.Rect(0, 0, self.width, self.height)
         self.game = game
-        self.buttons: dict[str, Button] = {}
+        self.buttons: list[Button] = []
         self.running: bool = True
+        # BUTTONS
+        self.title = Button('title', self.rect.centerx, self.rect.centery / 2,
+                            pygame.image.load('assets/title.png'),
+                            2.2, lambda: 1)
+        self.buttons.append(self.title)
+        self.continu: Button | None = None
+        self.start = Button('start', self.rect.centerx,
+                            self.rect.centery * 1.2,
+                            pygame.image.load('assets/start.png'),
+                            1, self.game.level_loop)
+        self.buttons.append(self.start)
+        self.settings = Button('settings', self.rect.centerx,
+                               self.rect.centery * 1.4,
+                               pygame.image.load('assets/settings.png'),
+                               1, lambda: 1)
+        self.buttons.append(self.settings)
+        self.highscores = Button('highscores', self.rect.centerx,
+                                 self.rect.centery * 1.6,
+                                 pygame.image.load('assets/highscores.png'),
+                                 1, lambda: 1)
+        self.buttons.append(self.highscores)
+        self.quit = Button('quit', self.rect.centerx, self.rect.centery * 1.8,
+                           pygame.image.load('assets/quit.png'),
+                           1, pygame.quit)
+        self.buttons.append(self.quit)
 
     def draw_text(self, text: str, font: pygame.font.Font,
                   color: tuple[int, int, int], x: float, y: float) -> None:
@@ -32,37 +57,12 @@ class Menu:
                        (0, 0, 255), 75, self.game.WINDOW_HEIGHT - 15)
 
         # BUTTONS
-        title = Button(self.rect.centerx, self.rect.centery / 2,
-                       pygame.image.load('assets/title.png'), 2.2)
-        self.buttons['title'] = title
-        if self.game.current_play is True:
-            continu = Button(self.rect.centerx, self.rect.centery,
-                             pygame.image.load('assets/continue.png'), 1)
-            self.buttons['continue'] = continu
-        start = Button(self.rect.centerx, self.rect.centery * 1.2,
-                       pygame.image.load('assets/start.png'), 1)
-        self.buttons['start'] = start
-        settings = Button(self.rect.centerx, self.rect.centery * 1.4,
-                          pygame.image.load('assets/settings.png'), 1)
-        self.buttons['settings'] = settings
-        highscores = Button(self.rect.centerx, self.rect.centery * 1.6,
-                            pygame.image.load('assets/highscores.png'), 1)
-        self.buttons['highscores'] = highscores
-        quit = Button(self.rect.centerx, self.rect.centery * 1.8,
-                      pygame.image.load('assets/quit.png'), 1)
-        self.buttons['quit'] = quit
-
         for button in self.buttons:
-            self.buttons[button].draw(self.screen)
+            button.draw(self.screen)
 
     def get_event(self) -> None:
-        self.buttons['title'].get_click(self.game, lambda: 1)
-        if self.game.current_play is True:
-            self.buttons['continue'].get_click(self.game, lambda: setattr(self, 'running', False))
-        self.buttons['start'].get_click(self.game, self.game.level_loop)
-        self.buttons['settings'].get_click(self.game, lambda: 1)
-        self.buttons['highscores'].get_click(self.game, lambda: 1)
-        self.buttons['quit'].get_click(self.game, pygame.quit)
+        for button in self.buttons:
+            button.get_click(self.game, button.func)
 
     def update(self) -> None:
         ...
