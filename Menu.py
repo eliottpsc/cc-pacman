@@ -13,7 +13,6 @@ class Menu:
         self.game = game
         self.buttons: list[Button] = []
         self.running: bool = True
-        self.selector: MenuSelector = MenuSelector(game)
         # BUTTONS
         # self.title = Button('title', self.rect.centerx, self.rect.centery / 2,
         #                     pygame.image.load('assets/title.png'),
@@ -39,6 +38,7 @@ class Menu:
                            pygame.image.load('assets/quit.png'),
                            1, pygame.quit)
         self.buttons.append(self.quit)
+        self.selector: MenuSelector = MenuSelector(game, self.buttons[0])
         self.select_dir: str | None = None
         self.select_cycle = self.select()
 
@@ -113,10 +113,10 @@ class Menu:
 
 
 class MenuSelector():
-    def __init__(self, game) -> None:
+    def __init__(self, game, initial_btn) -> None:
         self.game = game
         self.screen = game.screen
-        self.selected: Button
+        self.selected: Button = initial_btn
         self.image = pygame.transform.scale(
             pygame.image.load('assets/menu-select.png'),
             (40, 40))
