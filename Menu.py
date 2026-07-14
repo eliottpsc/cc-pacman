@@ -15,10 +15,10 @@ class Menu:
         self.running: bool = True
         self.selector: MenuSelector = MenuSelector(game)
         # BUTTONS
-        self.title = Button('title', self.rect.centerx, self.rect.centery / 2,
-                            pygame.image.load('assets/title.png'),
-                            2.2, lambda: 1)
-        self.buttons.append(self.title)
+        # self.title = Button('title', self.rect.centerx, self.rect.centery / 2,
+        #                     pygame.image.load('assets/title.png'),
+        #                     2.2, lambda: 1)
+        # self.buttons.append(self.title)
         self.continu: Button | None = None
         self.start = Button('start', self.rect.centerx,
                             self.rect.centery * 1.2,
@@ -69,6 +69,11 @@ class Menu:
     def draw(self) -> None:
         # BACKGROUND
         self.screen.fill((255, 0, 255), self.rect)
+        title = pygame.transform.scale(pygame.image.load('assets/title.png'), (640, 128))
+        title_rect = title.get_rect()
+        title_rect.centerx = self.game.WINDOW_WIDTH / 2
+        title_rect.centery = self.game.WINDOW_WIDTH / 4
+        _ = self.screen.blit(title, title_rect)
         # TEXT
         self.draw_text("WOW KILLER",
                        pygame.font.SysFont('comicsans', 40),
@@ -82,7 +87,7 @@ class Menu:
                 'continu', self.rect.centerx, self.rect.centery,
                 pygame.image.load('assets/continue.png'), 1,
                 lambda: setattr(self, 'running', False))
-            self.buttons.insert(1, self.continu)
+            self.buttons.insert(0, self.continu)
             next(self.select_cycle)
         for button in self.buttons:
             button.draw(self.screen)
