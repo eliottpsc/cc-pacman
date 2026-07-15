@@ -1,5 +1,5 @@
 annotated-types==0.7.0
-mazegenerator @ file:///home/logan/pacman/mazegenerator-00001-py3-none-any.whl#sha256=98153cbb33a9f83f83b02c1175231ca944d186fda4750f051930dd467e16376f
+mazegenerator
 numpy==2.5.1
 pydantic==2.13.4
 pydantic_core==2.46.4
