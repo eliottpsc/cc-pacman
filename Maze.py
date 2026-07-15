@@ -54,8 +54,8 @@ class Maze():
         for x, row in enumerate(self.maze):
             for y, col in enumerate(row):
                 new = Pellet(x, y)
-                self.pellets.add(new)
-                print(f'added pellet to {x}, {y}')
+                if self.maze[y][x] != 'F':
+                    self.pellets.add(new)
 
     def draw_grid(self) -> None:
         """Calls Display.draw_cell() method on every cell of the maze."""
