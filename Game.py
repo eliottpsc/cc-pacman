@@ -10,6 +10,7 @@ from Maze import Maze
 from Menu import Menu
 from Pac import Pac
 from CurrentPlay import CurrentPlay
+from Pellet import Pellet
 
 @dataclass
 class Game:
@@ -48,7 +49,8 @@ class Game:
             pygame.display.flip()
 
     def level_loop(self):
-        maze = Maze(self)
+        pellets = pygame.sprite.Group()
+        maze = Maze(self, pellets)
         pac = Pac(self, maze.load())
         clock = pygame.time.Clock()
         pac.create()
@@ -64,6 +66,11 @@ class Game:
             _ = self.screen.fill((0, 0, 0))
 
             maze.draw_grid()
+            maze.pellets.update()
+            maze.pellets.draw(self.screen)
+            cols = pygame.sprite.spritecollide(pac, maze.pellets, True)
+            for col in cols:
+                print(col)
 
             dt = clock.tick(60)
             pac.update(keys, dt)
