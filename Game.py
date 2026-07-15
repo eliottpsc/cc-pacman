@@ -70,7 +70,7 @@ class Game:
             maze.pellets.draw(self.screen)
             cols = pygame.sprite.spritecollide(pac, maze.pellets, True)
             for col in cols:
-                print(col)
+                current_play.score += 20
 
             dt = clock.tick(60)
             pac.update(keys, dt)
