@@ -95,6 +95,13 @@ class Menu:
         self.selector.draw()
 
     def get_event(self) -> None:
+        pos = pygame.mouse.get_pos()
+        for button in self.buttons:
+            if button.rect.collidepoint(pos):
+                self.selector.rect.centery = button.rect.centery
+                self.selector.rect_right.centery = button.rect.centery
+                self.selector.selected = button
+
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
