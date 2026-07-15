@@ -1,4 +1,5 @@
 import pygame
+from random import randrange
 
 from Pellet import Pellet
 
@@ -51,11 +52,13 @@ class Maze():
             _ = pygame.draw.rect(self.screen, self.color, edgeW, 4)
 
     def add_pellets(self) -> None:
+        spawn_chance = 70
         for x, row in enumerate(self.maze):
             for y, col in enumerate(row):
                 new = Pellet(x, y)
                 if self.maze[y][x] != 'F':
-                    self.pellets.add(new)
+                    if spawn_chance > randrange(0, 100):
+                        self.pellets.add(new)
 
     def draw_grid(self) -> None:
         """Calls Display.draw_cell() method on every cell of the maze."""
