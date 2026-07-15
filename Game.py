@@ -47,13 +47,10 @@ class Game:
 
             pygame.display.flip()
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-
-    def level_loop(self) -> Never:
-        pac: Pac = Pac(self)
-        maze: Maze = Maze(self)
+    def level_loop(self):
+        maze = Maze(self)
+        pac = Pac(self, maze.load())
+        clock = pygame.time.Clock()
         pac.create()
         current_play = CurrentPlay()
         self.current_play = current_play.exists
@@ -67,7 +64,9 @@ class Game:
             _ = self.screen.fill((0, 0, 0))
 
             maze.draw_grid()
-            pac.update(keys)
+
+            dt = clock.tick(60)
+            pac.update(keys, dt)
 
             pygame.display.flip()
 
