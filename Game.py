@@ -9,6 +9,7 @@ from Config import Config
 from Maze import Maze
 from Menu import Menu
 from Pac import Pac
+from Ghost import Ghost
 from CurrentPlay import CurrentPlay
 
 @dataclass
@@ -50,8 +51,8 @@ class Game:
     def level_loop(self):
         maze = Maze(self)
         pac = Pac(self, maze.load())
+        ghost = Ghost(self, maze.load())
         clock = pygame.time.Clock()
-        pac.create()
         current_play = CurrentPlay()
         self.current_play = current_play.exists
         while True:
@@ -66,6 +67,7 @@ class Game:
             maze.draw_grid()
 
             dt = clock.tick(60)
+            ghost.update(pac.pos, dt)
             pac.update(keys, dt)
 
             pygame.display.flip()
