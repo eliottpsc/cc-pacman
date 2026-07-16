@@ -8,6 +8,7 @@ from Entity import Entity
 class Ghost(Entity):
     def __init__(self, game, maze) -> None:
         super().__init__(game, maze)
+        self.move_delay /= (9 / 10)
         self.pos = np.array((2, 10))
         self.rect = pygame.Rect(*self.pos, 50, 50)
 
