@@ -2,19 +2,22 @@ import sys
 import pygame
 from time import sleep
 from dataclasses import dataclass
-from typing import Self
+from typing import Never, Self
+import pygame
 
 from Config import Config
 from Maze import Maze
+from Menu import Menu
 from Pac import Pac
 from Ghost import Ghost
-
+from CurrentPlay import CurrentPlay
 
 @dataclass
 class Game:
 
     screen: pygame.Surface
     conf: Config
+    current_play: bool
 
     WINDOW_WIDTH: int = 1200
     WINDOW_HEIGHT: int = 1200
@@ -24,7 +27,8 @@ class Game:
         game = cls(
             screen=pygame.display.set_mode(
                 (cls.WINDOW_WIDTH, cls.WINDOW_HEIGHT)),
-            conf=Config.load())
+            conf=Config.load(),
+            current_play = False)
         sleep(1)
         game.init()
         return game
@@ -34,16 +38,23 @@ class Game:
         pygame.display.set_caption("pac-man")
         pygame.font.init()
 
+    def menu_loop(self) -> None:
+        menu = Menu(self)
+        while True:
+            if menu.running is False:
+                break
+            menu.draw()
+            menu.get_event()
 
-    def menu_loop(self):
-        ...
+            pygame.display.flip()
 
     def level_loop(self):
         maze = Maze(self)
         pac = Pac(self, maze.load())
         ghost = Ghost(self, maze.load())
         clock = pygame.time.Clock()
-        pac.create()
+        current_play = CurrentPlay()
+        self.current_play = current_play.exists
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -51,7 +62,7 @@ class Game:
 
             keys = pygame.key.get_pressed()
 
-            self.screen.fill((0, 0, 0))
+            _ = self.screen.fill((0, 0, 0))
 
             maze.draw_grid()
 
@@ -61,5 +72,5 @@ class Game:
 
             pygame.display.flip()
 
-    def hiscores_loop(self):
+    def hiscores_loop(self) -> None:
         ...

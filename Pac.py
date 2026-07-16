@@ -17,6 +17,8 @@ class Pac(Entity):
             new_dir = (-1, 0)
         if keys[pygame.K_DOWN]:
             new_dir = (1, 0)
+        if keys[pygame.K_ESCAPE]:
+            self.game.menu_loop()
 
         self.move_timer += dt
         if self.move_timer >= self.move_delay:
