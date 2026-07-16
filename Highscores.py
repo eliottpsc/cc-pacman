@@ -46,13 +46,42 @@ class Highscores():
         self.game.screen.blit(img, box)
 
     def display(self) -> None:
+        # BACKGROUND
         self.game.screen.fill((0, 255, 0), self.rect)
+        # TITLE
         title = pygame.transform.scale(
             pygame.image.load('assets/highscores.png'), (640, 128))
         title_rect = title.get_rect()
         title_rect.centerx = self.game.WINDOW_WIDTH / 2
-        title_rect.centery = self.game.WINDOW_WIDTH / 4
+        title_rect.centery = self.game.WINDOW_HEIGHT / 4
+        # SCORE PANNEL
+        scores_surf = pygame.Surface(
+            (self.game.WINDOW_WIDTH / 2, self.game.WINDOW_HEIGHT / 2),
+            pygame.SRCALPHA)
+        pygame.draw.rect(scores_surf, (0, 0, 0, 128), scores_surf.get_rect())
+        scores_rect = scores_surf.get_rect(
+            centerx=self.game.WINDOW_WIDTH / 2,
+            centery=self.game.WINDOW_HEIGHT / 1.5
+        )
+        # SCORES
+        self.draw_score_boxes(scores_surf)
+
         _ = self.game.screen.blit(title, title_rect)
+        _ = self.game.screen.blit(scores_surf, scores_rect)
+
+    def draw_score_boxes(self, surf) -> None:
+        color = (255, 0, 0)
+        font = pygame.font.SysFont('comicsans', 60)
+        dy = 0
+        for score in sorted(self.scores, key=lambda s: self.scores[s], reverse=True):
+            text = f'{score}                {self.scores[score]}'
+            img = font.render(text, True, color)
+            x = int(self.game.WINDOW_WIDTH / 2)
+            y = int(self.game.WINDOW_HEIGHT / 2)
+            box = img.get_rect()
+            box.center = (x, y + dy)
+            dy += 70
+            self.game.screen.blit(img, box)
 
 
 # class InputBox(pygame.sprite.Sprite):
