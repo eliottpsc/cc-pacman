@@ -56,8 +56,8 @@ class Game:
             maze.draw_grid()
 
             dt = clock.tick(60)
+            ghost.update(pac.pos, dt)
             pac.update(keys, dt)
-            ghost.update(dt)
 
             pygame.display.flip()
 
