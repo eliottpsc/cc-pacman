@@ -8,17 +8,19 @@ class Pac(Entity):
         self.image = pygame.image.load("assets/pac.png")
         self.image = pygame.transform.scale(self.image, (50, 50))
 
-    def update(self, keys, dt):
-        new_dir = self.direction
-        image = self.image
+    def next_move(self, keys):
         if keys[pygame.K_LEFT]:
-            new_dir = (0, -1)
+            return (0, -1)
         if keys[pygame.K_RIGHT]:
-            new_dir = (0, 1)
+            return (0, 1)
         if keys[pygame.K_UP]:
-            new_dir = (-1, 0)
+            return (-1, 0)
         if keys[pygame.K_DOWN]:
-            new_dir = (1, 0)
+            return (1, 0)
+        return self.direction
+
+    def update(self, keys, dt):
+        new_dir = self.next_move(keys)
         if keys[pygame.K_ESCAPE]:
             self.game.menu_loop()
 
