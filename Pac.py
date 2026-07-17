@@ -1,5 +1,4 @@
 import pygame
-import numpy as np
 from Entity import Entity
 
 
@@ -10,8 +9,7 @@ class Pac(Entity):
         self.image = pygame.transform.scale(self.image, (50, 50))
 
     def update(self, keys, dt):
-        dire = tuple(self.direction.tolist())
-        new_dir = dire
+        new_dir = self.direction
         image = self.image
         if keys[pygame.K_LEFT]:
             new_dir = (0, -1)
@@ -26,15 +24,14 @@ class Pac(Entity):
 
         self.move_timer += dt
         if self.move_timer >= self.move_delay:
-            self.move_timer = 0
             if self.can_move(new_dir):
-                self.direction = np.array(new_dir)
-                self.pos += self.direction
-            elif self.can_move(dire):
-                self.pos += self.direction
+                self.move_timer = 0
+                self.direction = new_dir
+                self.pos = (self.pos[0] + self.direction[0],
+                            self.pos[1] + self.direction[1])
 
         rot = {(0, -1): 0, (0, 1): 180, (-1, 0): 270, (1, 0): 90}
-        image = pygame.transform.rotate(self.image, rot[dire])
+        image = pygame.transform.rotate(self.image, rot[self.direction])
 
         blocksize = self.game.WINDOW_WIDTH // self.game.conf.width
         self.rect = pygame.Rect(self.pos[1] * blocksize,
