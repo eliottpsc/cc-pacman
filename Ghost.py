@@ -11,7 +11,7 @@ class Ghost(Entity):
         self.pos = (2, 10)
         self.rect = pygame.Rect(*self.pos, 50, 50)
 
-    def next_move(self, pacpos):
+    def choose_direction(self, pacpos):
         queue = [pacpos]
         visited = [pacpos]
         parent = {}
@@ -41,15 +41,9 @@ class Ghost(Entity):
 
 
     def update(self, pacpos, dt):
-        new_dir = self.next_move(pacpos)
+        new_dir = self.choose_direction(pacpos)
 
-        self.move_timer += dt
-        if self.move_timer >= self.move_delay:
-            if self.can_move(new_dir):
-                self.move_timer = 0
-                self.direction = new_dir
-                self.pos = (self.pos[0] + self.direction[0],
-                            self.pos[1] + self.direction[1])
+        self.move(new_dir, dt)
 
         blocksize = self.game.WINDOW_WIDTH // self.game.conf.width
         self.rect = pygame.Rect(self.pos[1] * blocksize,

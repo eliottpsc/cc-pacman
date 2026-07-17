@@ -28,5 +28,14 @@ class Entity:
         if dire == (0, 1):
             return walls[2] == "0"
 
+    def move(self, new_dir, dt):
+        self.move_timer += dt
+        if self.move_timer >= self.move_delay:
+            if self.can_move(new_dir):
+                self.move_timer = 0
+                self.direction = new_dir
+                self.pos = (self.pos[0] + self.direction[0],
+                            self.pos[1] + self.direction[1])
+
 if __name__ == "__main__":
     pass
