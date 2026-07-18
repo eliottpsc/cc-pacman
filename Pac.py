@@ -26,11 +26,16 @@ class Pac(Entity):
 
         self.move(new_dir, dt)
 
+        tx, ty = self.pos[0] * self.tile_size, self.pos[1] * self.tile_size
+        dx, dy = tx - self.pixel[0], ty - self.pixel[1]
+        sign = ((dx > 0) - (dx < 0), (dy > 0) - (dy < 0))
+        step = self.speed * dt
+        self.pixel = (
+                tx if abs(dx) < step else self.pixel[0] + step * sign[0],
+                ty if abs(dy) < step else self.pixel[1] + step * sign[1],
+                )
+
         rot = {(0, -1): 0, (0, 1): 180, (-1, 0): 270, (1, 0): 90}
         image = pygame.transform.rotate(self.image, rot[self.direction])
-        blocksize = self.game.WINDOW_WIDTH // self.game.conf.width
-        self.rect = pygame.Rect(self.pos[1] * blocksize,
-                                self.pos[0] * blocksize,
-                                50, 50)
+        self.rect = pygame.Rect(self.pixel[1], self.pixel[0], 50, 50)
         self.screen.blit(image, self.rect)
-#       pygame.draw.rect(self.screen, (220, 200, 0), self.rect, 10)

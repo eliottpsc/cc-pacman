@@ -45,9 +45,8 @@ class Ghost(Entity):
 
         self.move(new_dir, dt)
 
-        blocksize = self.game.WINDOW_WIDTH // self.game.conf.width
-        self.rect = pygame.Rect(self.pos[1] * blocksize,
-                                self.pos[0] * blocksize,
+        self.rect = pygame.Rect(self.pos[1] * self.tile_size,
+                                self.pos[0] * self.tile_size,
                                 50, 50)
         pygame.draw.rect(self.screen, (220, 0, 200), self.rect, 10)
 

@@ -7,10 +7,12 @@ class Entity:
         self.screen: pygame.Surface = game.screen
         self.maze = maze
         self.pos = (0, 0)
+        self.pixel = (0, 0)
         self.direction = (0, 1)
         self.move_timer = 0
         self.move_delay = 360
-        self.speed: float = 0.5
+        self.tile_size = self.game.WINDOW_WIDTH // self.game.conf.width
+        self.speed = self.tile_size / self.move_delay
         self.rect = pygame.Rect(*self.pos, 50, 50)
 
     def can_move(self, dire: tuple):
@@ -27,12 +29,13 @@ class Entity:
             return walls[0] == "0"
         if dire == (0, 1):
             return walls[2] == "0"
+        return False
 
     def move(self, new_dir, dt):
         self.move_timer += dt
         if self.move_timer >= self.move_delay:
+            self.move_timer = 0
             if self.can_move(new_dir):
-                self.move_timer = 0
                 self.direction = new_dir
                 self.pos = (self.pos[0] + self.direction[0],
                             self.pos[1] + self.direction[1])
