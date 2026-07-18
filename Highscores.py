@@ -81,11 +81,12 @@ class Highscores():
         self.game.screen.blit(mr, mr_rect)
         self.game.screen.blit(scores_surf, scores_rect)
 
-    def draw_score_boxes(self, surf) -> None:
+    def draw_score_boxes(self, surf: pygame.Surface) -> None:
         color = (255, 0, 0)
         font = pygame.font.SysFont('comicsans', 60)
         dy = 0
-        for score in sorted(self.scores, key=lambda s: self.scores[s], reverse=True):
+        for score in sorted(self.scores, key=lambda s: self.scores[s],
+                            reverse=True):
             text = f'{score}                {self.scores[score]}'
             img = font.render(text, True, color)
             x = int(self.game.WINDOW_WIDTH / 2)
@@ -94,32 +95,3 @@ class Highscores():
             box.center = (x, y + dy)
             dy += 70
             self.game.screen.blit(img, box)
-
-
-# class InputBox(pygame.sprite.Sprite):
-#     def __init__(self) -> None:
-#         super().__init__()
-#         self.isactive = True
-#         self.color = (255, 255, 255)
-#         self.background = None
-#         self.pos = (50, 50)
-#         self.width = 100
-#         self.font = pygame.font.SysFont('comicsans', 40)
-#         self.text = ''
-#         self.render_text()
-
-#     def update(self):
-#         self.render_text()
-
-#     def render_text(self):
-#         t_surf = self.font.render(self.text, True,
-#                                   self.color, self.background)
-#         self.image = pygame.Surface(
-#             (max(self.width, t_surf.get_width()+10),
-#              t_surf.get_height()+10), pygame.SRCALPHA)
-#         if self.background:
-#             self.image.fill(self.background)
-#         self.image.blit(t_surf, (5, 5))
-#         pygame.draw.rect(self.image, self.color,
-#                          self.image.get_rect().inflate(-2, -2), 2)
-#         self.rect = self.image.get_rect(topleft=self.pos)
