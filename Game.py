@@ -3,14 +3,16 @@ import pygame
 from time import sleep
 from dataclasses import dataclass
 from typing import Never, Self
-import pygame
 
 from Config import Config
 from Maze import Maze
 from Menu import Menu
 from Pac import Pac
+from Ghost import Ghost
 from CurrentPlay import CurrentPlay
 from Pellet import Pellet
+from Highscores import Highscores
+
 
 @dataclass
 class Game:
@@ -28,7 +30,7 @@ class Game:
             screen=pygame.display.set_mode(
                 (cls.WINDOW_WIDTH, cls.WINDOW_HEIGHT)),
             conf=Config.load(),
-            current_play = False)
+            current_play=False)
         sleep(1)
         game.init()
         return game
@@ -48,12 +50,12 @@ class Game:
 
             pygame.display.flip()
 
-    def level_loop(self):
+    def level_loop(self) -> Never:
         pellets = pygame.sprite.Group()
         maze = Maze(self, pellets)
         pac = Pac(self, maze.load())
+        ghost = Ghost(self, maze.load())
         clock = pygame.time.Clock()
-        pac.create()
         current_play = CurrentPlay()
         self.current_play = current_play.exists
         while True:
@@ -73,7 +75,27 @@ class Game:
                 current_play.score += 20
 
             dt = clock.tick(60)
+            ghost.update(pac.pos, dt)
             pac.update(keys, dt)
+
+            pygame.display.flip()
+
+    def highscores_loop(self) -> None:
+        hs = Highscores(self)
+        while hs.running:
+            events = pygame.event.get()
+            for event in events:
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        hs.running = False
+                    if event.key == pygame.K_BACKSPACE:
+                        hs.input_name(events)
+                elif hs.input_isactive:
+                    hs.input_name(events)
+            hs.display()
+            hs.draw_input_box()
 
             pygame.display.flip()
 

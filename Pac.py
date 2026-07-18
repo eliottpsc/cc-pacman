@@ -7,13 +7,6 @@ from pygame.sprite import Sprite
 class Pac(Entity, Sprite):
     def __init__(self, game, maze) -> None:
         super().__init__(game, maze)
-        self.create()
-
-    def create(self) -> None:
-        _ = pygame.draw.rect(self.screen, (0, 255, 0), self.rect, 20)
-
-    def destroy(self):
-        ...
 
     def update(self, keys, dt):
         new_dir= tuple(self.direction)
@@ -39,4 +32,4 @@ class Pac(Entity, Sprite):
         self.rect = pygame.Rect(self.pos[1] * blocksize,
                                 self.pos[0] * blocksize,
                                 50, 50)
-        _ = pygame.draw.rect(self.screen, (220, 200, 0), self.rect, 10)
+        pygame.draw.rect(self.screen, (220, 200, 0), self.rect, 10)
