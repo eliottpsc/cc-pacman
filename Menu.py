@@ -14,7 +14,8 @@ class Menu:
         self.buttons: list[Button] = []
         self.running: bool = True
         # BUTTONS
-        # self.title = Button('title', self.rect.centerx, self.rect.centery / 2,
+        # self.title = Button('title', self.rect.centerx,
+        #                     self.rect.centery / 2,
         #                     pygame.image.load('assets/title.png'),
         #                     2.2, lambda: 1)
         # self.buttons.append(self.title)
@@ -32,7 +33,7 @@ class Menu:
         self.highscores = Button('highscores', self.rect.centerx,
                                  self.rect.centery * 1.6,
                                  pygame.image.load('assets/highscores.png'),
-                                 1, lambda: 1)
+                                 1, self.game.highscores_loop)
         self.buttons.append(self.highscores)
         self.quit = Button('quit', self.rect.centerx, self.rect.centery * 1.8,
                            pygame.image.load('assets/quit.png'),
@@ -69,7 +70,8 @@ class Menu:
     def draw(self) -> None:
         # BACKGROUND
         self.screen.fill((255, 0, 255), self.rect)
-        title = pygame.transform.scale(pygame.image.load('assets/title.png'), (640, 128))
+        title = pygame.transform.scale(
+            pygame.image.load('assets/title.png'), (640, 128))
         title_rect = title.get_rect()
         title_rect.centerx = self.game.WINDOW_WIDTH / 2
         title_rect.centery = self.game.WINDOW_WIDTH / 4
