@@ -1,13 +1,19 @@
 import pygame
+from random import randrange
+
+from Pellet import Pellet
+
 
 class Maze():
     """Handle loading and drawing of the maze"""
-    def __init__(self, game) -> None:
+    def __init__(self, game, pellets) -> None:
         super().__init__()
         self.game = game
         self.screen = game.screen
         self.color: tuple[int, int, int] = (255, 0, 0)
         self.maze = self.load()
+        self.pellets = pellets
+        self.add_pellets()
 
     def load(self) -> list[list[str]]:
         mazefile = open('mazefile', 'r')
@@ -44,6 +50,15 @@ class Maze():
             _ = pygame.draw.rect(self.screen, self.color, edgeS, 4)
         if int(format(int(cell, 16), '04b')[0]):
             _ = pygame.draw.rect(self.screen, self.color, edgeW, 4)
+
+    def add_pellets(self) -> None:
+        spawn_chance = 70
+        for x, row in enumerate(self.maze):
+            for y, col in enumerate(row):
+                new = Pellet(x, y)
+                if self.maze[y][x] != 'F':
+                    if spawn_chance > randrange(0, 100):
+                        self.pellets.add(new)
 
     def draw_grid(self) -> None:
         """Calls Display.draw_cell() method on every cell of the maze."""

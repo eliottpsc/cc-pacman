@@ -10,6 +10,7 @@ from Menu import Menu
 from Pac import Pac
 from Ghost import Ghost
 from CurrentPlay import CurrentPlay
+from Pellet import Pellet
 from Highscores import Highscores
 
 
@@ -50,7 +51,8 @@ class Game:
             pygame.display.flip()
 
     def level_loop(self) -> Never:
-        maze = Maze(self)
+        pellets = pygame.sprite.Group()
+        maze = Maze(self, pellets)
         pac = Pac(self, maze.load())
         ghost = Ghost(self, maze.load())
         clock = pygame.time.Clock()
@@ -66,6 +68,11 @@ class Game:
             _ = self.screen.fill((0, 0, 0))
 
             maze.draw_grid()
+            maze.pellets.update()
+            maze.pellets.draw(self.screen)
+            cols = pygame.sprite.spritecollide(pac, maze.pellets, True)
+            for col in cols:
+                current_play.score += 20
 
             dt = clock.tick(60)
             ghost.update(pac.pos, dt)

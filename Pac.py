@@ -1,9 +1,10 @@
 import pygame
 import numpy as np
 from Entity import Entity
+from pygame.sprite import Sprite
 
 
-class Pac(Entity):
+class Pac(Entity, Sprite):
     def __init__(self, game, maze) -> None:
         super().__init__(game, maze)
 

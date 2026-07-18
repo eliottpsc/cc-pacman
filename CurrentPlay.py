@@ -9,7 +9,7 @@ class CurrentPlay:
         self.difficulty: int
         self.level: int
         self.level_seed: int
-        self.score: int
+        self.score: int = 0
         self.lives: int
         self.pellets: list[tuple[int, int]]
         self.power_pellets: list[tuple[int, int]]
