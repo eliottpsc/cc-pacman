@@ -48,6 +48,16 @@ class Highscores():
     def display(self) -> None:
         # BACKGROUND
         self.game.screen.fill((0, 255, 0), self.rect)
+        ml = pygame.transform.scale(
+            pygame.image.load('assets/moumou-pedestal-l.png'), (244, 600))
+        ml_rect = ml.get_rect()
+        ml_rect.centerx = 130
+        ml_rect.centery = self.game.WINDOW_HEIGHT - 400
+        mr = pygame.transform.scale(
+            pygame.image.load('assets/moumou-pedestal-r.png'), (244, 600))
+        mr_rect = mr.get_rect()
+        mr_rect.centerx = self.game.WINDOW_WIDTH - 130
+        mr_rect.centery = self.game.WINDOW_HEIGHT - 400
         # TITLE
         title = pygame.transform.scale(
             pygame.image.load('assets/highscores.png'), (640, 128))
@@ -66,8 +76,10 @@ class Highscores():
         # SCORES
         self.draw_score_boxes(scores_surf)
 
-        _ = self.game.screen.blit(title, title_rect)
-        _ = self.game.screen.blit(scores_surf, scores_rect)
+        self.game.screen.blit(title, title_rect)
+        self.game.screen.blit(ml, ml_rect)
+        self.game.screen.blit(mr, mr_rect)
+        self.game.screen.blit(scores_surf, scores_rect)
 
     def draw_score_boxes(self, surf) -> None:
         color = (255, 0, 0)
