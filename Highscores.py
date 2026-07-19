@@ -8,7 +8,7 @@ class Highscores():
         self.game = game
         self.hs_file = 'highscores'
         self.scores = self.load()
-        self.input = 'DEFAULT'
+        self.input = ''
         self.input_isactive = True
         self.running = True
         self.rect: pygame.Rect = pygame.Rect(0, 0, self.game.WINDOW_WIDTH,
@@ -23,26 +23,41 @@ class Highscores():
         with open(self.hs_file, 'w') as f:
             json.dump(self.scores, f)
 
-    def input_name(self, events: list[Any]) -> None:
+    def input_name(self, events: list[Any], score: int) -> None:
         for event in events:
             if event.type == pygame.QUIT:
                 pygame.quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
+                    self.save_new(self.input, score)
                     self.input_isactive = False
+                    self.game.current_play = False
                 elif event.key == pygame.K_BACKSPACE:
                     self.input = self.input[:-1]
                 else:
                     self.input += event.unicode
 
-    def draw_input_box(self) -> None:
-        color = (0, 0, 0)
+    def draw_input_box(self, score: int) -> None:
+        score_font = pygame.font.SysFont('comicsans', 100)
+        score_img = score_font.render(f'SCORE: {score}', True, (255, 255, 0))
+        score_box = score_img.get_rect()
+        score_box.center = (int(self.game.WINDOW_WIDTH / 2),
+                            int(self.game.WINDOW_HEIGHT / 5))
+        self.game.screen.blit(score_img, score_box)
+
+        prompt_font = pygame.font.SysFont('comicsans', 30)
+        prompt_img = prompt_font.render('ENTER YOUR NAME:', True,
+                                        (100, 100, 100))
+        prompt_box = prompt_img.get_rect()
+        prompt_box.center = (int(self.game.WINDOW_WIDTH / 2),
+                             int(self.game.WINDOW_HEIGHT / 3))
+        self.game.screen.blit(prompt_img, prompt_box)
+
         font = pygame.font.SysFont('comicsans', 40)
-        img = font.render(self.input, True, color)
+        img = font.render(self.input, True, (255, 255, 255))
         box = img.get_rect()
         box.center = (int(self.game.WINDOW_WIDTH / 2),
                       int(self.game.WINDOW_HEIGHT / 2))
-        # box = pygame.Rect(50, 50, 200, 50)
         self.game.screen.blit(img, box)
 
     def display(self) -> None:

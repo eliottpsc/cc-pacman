@@ -7,9 +7,10 @@ from pygame.sprite import Sprite
 class Pac(Entity, Sprite):
     def __init__(self, game, maze) -> None:
         super().__init__(game, maze)
+        self.dead = False
 
     def update(self, keys, dt):
-        new_dir= tuple(self.direction)
+        new_dir = tuple(self.direction)
         if keys[pygame.K_LEFT]:
             new_dir = (0, -1)
         if keys[pygame.K_RIGHT]:
@@ -20,6 +21,8 @@ class Pac(Entity, Sprite):
             new_dir = (1, 0)
         if keys[pygame.K_ESCAPE]:
             self.game.menu_loop()
+        if keys[pygame.K_k]:
+            self.dead = True
 
         self.move_timer += dt
         if self.move_timer >= self.move_delay:
