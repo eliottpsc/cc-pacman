@@ -41,9 +41,9 @@ class Ghost(Entity):
 
 
     def update(self, pacpos, dt):
-        new_dir = self.choose_direction(pacpos)
+        self.next_dir = self.choose_direction(pacpos)
 
-        self.move(new_dir, dt)
+        self.move(dt)
 
         self.rect = pygame.Rect(self.pos[1] * self.tile_size,
                                 self.pos[0] * self.tile_size,

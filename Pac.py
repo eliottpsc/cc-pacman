@@ -17,14 +17,16 @@ class Pac(Entity):
             return (-1, 0)
         if keys[pygame.K_DOWN]:
             return (1, 0)
-        return self.direction
+        return self.next_dir
 
     def update(self, keys, dt):
-        new_dir = self.choose_direction(keys)
+        self.next_dir = self.choose_direction(keys)
         if keys[pygame.K_ESCAPE]:
             self.game.menu_loop()
 
-        self.move(new_dir, dt)
+        if not self.can_move(self.direction):
+            self.move_timer = self.move_delay
+        self.move(dt)
 
         tx, ty = self.pos[0] * self.tile_size, self.pos[1] * self.tile_size
         dx, dy = tx - self.pixel[0], ty - self.pixel[1]
