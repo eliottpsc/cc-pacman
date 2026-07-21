@@ -24,7 +24,8 @@ class Pac(Entity):
         if keys[pygame.K_ESCAPE]:
             self.game.menu_loop()
 
-        if not self.can_move(self.direction):
+        if (not self.can_move(self.direction)
+            and all(p % self.tile_size == 0 for p in self.pixel)):
             self.move_timer = self.move_delay
         self.move(dt)
 
