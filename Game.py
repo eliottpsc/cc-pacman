@@ -58,6 +58,8 @@ class Game:
         clock = pygame.time.Clock()
         current_play = CurrentPlay()
         self.current_play = current_play.exists
+        pygame.mixer.music.load("assets/audio/pacman_beginning.wav")
+        pygame.mixer.music.play()
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
