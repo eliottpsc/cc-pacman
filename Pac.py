@@ -1,13 +1,22 @@
 import pygame
+from itertools import cycle
 from Entity import Entity
 from pygame.sprite import Sprite
+from Spritesheet import Spritesheet
 
 
 class Pac(Entity, Sprite):
     def __init__(self, game, maze) -> None:
         super().__init__(game, maze)
-        self.image = pygame.image.load("assets/pac.png")
-        self.image = pygame.transform.scale(self.image, (50, 50))
+        self.ss = Spritesheet("assets/pacman.png")
+        self.images = cycle(self.ss.images_at([
+            (0, 284, 196, 196),
+            (233, 284, 196, 196),
+            (465, 284, 196, 196),
+            (233, 284, 196, 196),
+            ]))
+        #self.image = pygame.image.load("assets/pac.png")
+        #self.image = pygame.transform.scale(self.image, (self.tile_size * 0.75,)*2)
 
     def choose_direction(self, keys):
         if keys[pygame.K_LEFT]:
@@ -39,7 +48,8 @@ class Pac(Entity, Sprite):
                 ty if abs(dy) < step else self.pixel[1] + step * sign[1],
                 )
 
-        rot = {(0, -1): 0, (0, 1): 180, (-1, 0): 270, (1, 0): 90}
-        image = pygame.transform.rotate(self.image, rot[self.direction])
-        self.rect = pygame.Rect(self.pixel[1], self.pixel[0], 50, 50)
+        rot = {(0, -1): 180, (0, 1): 0, (-1, 0): 90, (1, 0): 270}
+        image = pygame.transform.rotate(next(self.images), rot[self.direction])
+        image = pygame.transform.scale(image, (self.tile_size,)*2)
+        self.rect = pygame.Rect(self.pixel[1], self.pixel[0], *(self.tile_size,)*2)
         self.screen.blit(image, self.rect)
