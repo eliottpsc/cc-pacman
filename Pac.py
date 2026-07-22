@@ -57,7 +57,7 @@ class Pac(Entity, Sprite):
             self.image = next(self.images)
 
         image = pygame.transform.rotate(self.image, rot[self.direction])
-        image = pygame.transform.scale(image, (self.tile_size,)*2)
+        image = pygame.transform.scale(image, (self.tile_size * 0.75,)*2)
 
-        self.rect = pygame.Rect(self.pixel[1], self.pixel[0], *(self.tile_size,)*2)
+        self.rect = pygame.Rect(self.pixel[1], self.pixel[0], *(self.tile_size * 0.75,)*2)
         self.screen.blit(image, self.rect)
