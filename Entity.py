@@ -12,6 +12,8 @@ class Entity:
         self.next_dir = (0, 1)
         self.move_timer = 0
         self.move_delay = 300
+        self.anim_timer = 0
+        self.anim_delay = self.move_delay // 2
         self.tile_size = self.game.WINDOW_WIDTH // self.game.conf.width
         self.speed = self.tile_size / self.move_delay
         self.rect = pygame.Rect(*self.pos, 50, 50)

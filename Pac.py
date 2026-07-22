@@ -15,6 +15,7 @@ class Pac(Entity, Sprite):
             (465, 284, 196, 196),
             (233, 284, 196, 196),
             ]))
+        self.image = next(self.images)
         #self.image = pygame.image.load("assets/pac.png")
         #self.image = pygame.transform.scale(self.image, (self.tile_size * 0.75,)*2)
 
@@ -49,7 +50,14 @@ class Pac(Entity, Sprite):
                 )
 
         rot = {(0, -1): 180, (0, 1): 0, (-1, 0): 90, (1, 0): 270}
-        image = pygame.transform.rotate(next(self.images), rot[self.direction])
+
+        self.anim_timer += dt
+        if self.anim_timer >= self.anim_delay:
+            self.anim_timer = 0
+            self.image = next(self.images)
+
+        image = pygame.transform.rotate(self.image, rot[self.direction])
         image = pygame.transform.scale(image, (self.tile_size,)*2)
+
         self.rect = pygame.Rect(self.pixel[1], self.pixel[0], *(self.tile_size,)*2)
         self.screen.blit(image, self.rect)
