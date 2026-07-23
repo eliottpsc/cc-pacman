@@ -5,13 +5,9 @@ from dataclasses import dataclass
 from typing import Never, Self
 
 from Config import Config
-from Maze import Maze
 from Menu import Menu
-from Pac import Pac
-from Ghost import Ghost
-from CurrentPlay import CurrentPlay
 from Highscores import Highscores
-
+from CurrentPlay import CurrentPlay
 
 @dataclass
 class Game:
@@ -21,7 +17,7 @@ class Game:
     current_play: bool
 
     WINDOW_WIDTH: int = 1200
-    WINDOW_HEIGHT: int = 1200
+    WINDOW_HEIGHT: int = 1300
 
     @classmethod
     def create(cls) -> Self:
@@ -51,12 +47,11 @@ class Game:
 
     def level_loop(self) -> Never:
         hs = Highscores(self)
-        pellets = pygame.sprite.Group()
-        maze = Maze(self, pellets)
-        pac = Pac(self, maze.load())
-        ghost = Ghost(self, maze.load())
-        clock = pygame.time.Clock()
-        current_play = CurrentPlay()
+        current_play: CurrentPlay = CurrentPlay(self)
+        # pac = Pac(self, current_play.level.maze)
+        # ghost = Ghost(self, current_play.level.maze)
+        # clock = pygame.time.Clock()
+
         self.current_play = current_play.exists
         while self.current_play:
             for event in pygame.event.get():
@@ -67,17 +62,15 @@ class Game:
 
             _ = self.screen.fill((0, 0, 0))
 
-            maze.draw_grid()
-            maze.pellets.update()
-            maze.pellets.draw(self.screen)
-            cols = pygame.sprite.spritecollide(pac, maze.pellets, True)
-            for col in cols:
+            current_play.level.display()
+            cols = pygame.sprite.spritecollide(current_play.level.pac, current_play.level.pellets, True)
+            for _ in cols:
                 current_play.score += 20
 
-            dt = clock.tick(60)
-            ghost.update(pac.pos, dt)
-            pac.update(keys, dt)
-            while pac.dead and hs.input_isactive:
+            dt = current_play.level.clock.tick(60)
+            current_play.level.ghost.update(current_play.level.pac.pos, dt)
+            current_play.level.pac.update(keys, dt)
+            while current_play.level.pac.dead and hs.input_isactive:
                 _ = self.screen.fill((0, 0, 0))
                 hs.input_name(pygame.event.get(), current_play.score)
                 hs.draw_input_box(current_play.score)
