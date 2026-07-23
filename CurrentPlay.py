@@ -10,7 +10,7 @@ class CurrentPlay:
         self.level_num: int = 0
         self.level_seed: int = 0
         self.score: int = 0
-        self.lives: int
+        self.lives: int = 5
         self.pellets: list[tuple[int, int]]
         self.power_pellets: list[tuple[int, int]]
         self.ghost_pos: list[tuple[int, int]]

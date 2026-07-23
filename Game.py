@@ -8,6 +8,7 @@ from Config import Config
 from Menu import Menu
 from Highscores import Highscores
 from CurrentPlay import CurrentPlay
+from Hud import Hud
 
 
 @dataclass
@@ -60,6 +61,8 @@ class Game:
 
             # DRAW
             _ = self.screen.fill((0, 0, 0))
+            hud = Hud(current_play)
+            hud.draw()
             current_play.level.display()
 
             # COLLISIONS
