@@ -51,7 +51,7 @@ class Game:
         current_play: CurrentPlay = CurrentPlay(self)
 
         self.playing = current_play.exists
-        while self.playing:
+        while self.playing and not current_play.level.pac.dead:
             # INPUT EVENTS
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

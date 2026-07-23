@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 import pygame
-import numpy as np
-from typing import Any
 
 from Entity import Entity
 
@@ -10,53 +8,45 @@ class Ghost(Entity):
     def __init__(self, level) -> None:
         super().__init__(level)
         self.level = level
-        self.pos = np.array((2, 10))
+        self.move_delay /= (9 / 10)
+        self.pos = (2, 10)
         self.rect = pygame.Rect(self.pos[0], self.pos[1], 50, 50)
 
-    def next_move(self, pacpos: np.typing.NDArray[Any]) -> Any:
-        def totuple(arr: np.typing.NDArray[Any]) -> tuple[Any]:
-            return tuple(arr.tolist())
+    def choose_direction(self, pacpos):
         queue = [pacpos]
-        visited = [totuple(pacpos)]
-        parent: dict[Any, Any] = {}
+        visited = [pacpos]
+        parent = {}
 
         while queue:
             curr = queue.pop(0)
-            cell = self.level.maze[*curr]
+            cell = self.level.maze[curr[0]][curr[1]]
             walls = format(cell, '04b')
             mask = [True if b == '0' else False for b in walls]
-            dires = np.array(((0, -1), (1, 0), (0, 1), (-1, 0)))[mask]
+            dirs = [(0, -1), (1, 0), (0, 1), (-1, 0)]
+            dires = [dirs[i] for i in range(4) if mask[i]]
 
-            if np.array_equal(curr, self.pos):
+            if curr == self.pos:
                 try:
-                    return totuple(parent[totuple(curr)] - self.pos)
+                    ax, ay = parent[curr]
+                    bx, by = self.pos
+                    return (ax - bx, ay - by)
                 except KeyError:
                     return (0, 0)
 
             for dire in dires:
-                neighbor = totuple(curr + dire)
+                neighbor = (curr[0] + dire[0], curr[1] + dire[1])
                 if neighbor not in visited:
                     visited.append(neighbor)
-                    queue.append(np.array(neighbor))
+                    queue.append(neighbor)
                     parent[neighbor] = curr
 
-    def update(self, pacpos: np.typing.NDArray[Any], dt: int) -> None:
-        new_dir = self.next_move(pacpos)
-        self.move_timer += dt
-        if self.move_timer >= self.move_delay:
-            if self.can_move(new_dir):
-                self.move_timer = 0
-                self.direction = np.array(new_dir)
-                self.pos += self.direction
+    def update(self, pacpos, dt):
+        self.next_dir = self.choose_direction(pacpos)
 
-        blocksize = self.level.current_play.game.WINDOW_WIDTH // \
-            self.level.current_play.game.conf.width
-        self.rect = pygame.Rect(self.pos[1] * blocksize,
-                                self.pos[0] * blocksize,
+        self.move(dt)
+
+        self.rect = pygame.Rect(self.pos[1] * self.tile_size,
+                                self.pos[0] * self.tile_size,
                                 50, 50)
         pygame.draw.rect(self.level.level_surf,
                          (220, 0, 200), self.rect, 10)
-
-
-if __name__ == "__main__":
-    pass
