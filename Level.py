@@ -23,7 +23,6 @@ class Level():
         self.pellets: Any = pygame.sprite.Group()
         self.pac: Pac
         self.ghost: Ghost
-        self.clock = pygame.time.Clock()
 
     def generate(self, seed: int, entry: tuple[int, int],
                  exit: tuple[int, int],
@@ -54,7 +53,7 @@ class Level():
     def display(self) -> None:
         """Display the level saved in the instance."""
         self.level_surf = pygame.Surface.subsurface(
-            self.current_play.game.screen, (0, 0,
+            self.current_play.game.screen, (0, 100,
                                             self.size[0] * self.blocksize,
                                             self.size[1] * self.blocksize))
         # WALLS
@@ -102,5 +101,7 @@ class Level():
                     if spawn_chance > randrange(0, 100):
                         pellets.add(new)
 
-    def update(self) -> None:
-        ...
+    def update(self, keys: dict[int, bool]) -> None:
+        dt = pygame.time.Clock().tick(60)
+        self.ghost.update(self.pac.pos, dt)
+        self.pac.update(keys, dt)

@@ -2,22 +2,23 @@ import sys
 import pygame
 from time import sleep
 from dataclasses import dataclass
-from typing import Never, Self
+from typing import Self
 
 from Config import Config
 from Menu import Menu
 from Highscores import Highscores
 from CurrentPlay import CurrentPlay
 
+
 @dataclass
 class Game:
 
     screen: pygame.Surface
     conf: Config
-    current_play: bool
+    playing: bool
 
     WINDOW_WIDTH: int = 1200
-    WINDOW_HEIGHT: int = 1300
+    WINDOW_HEIGHT: int = 1400
 
     @classmethod
     def create(cls) -> Self:
@@ -25,7 +26,7 @@ class Game:
             screen=pygame.display.set_mode(
                 (cls.WINDOW_WIDTH, cls.WINDOW_HEIGHT)),
             conf=Config.load(),
-            current_play=False)
+            playing=False)
         sleep(1)
         game.init()
         return game
@@ -45,41 +46,39 @@ class Game:
 
             pygame.display.flip()
 
-    def level_loop(self) -> Never:
+    def level_loop(self) -> None:
         hs = Highscores(self)
         current_play: CurrentPlay = CurrentPlay(self)
-        # pac = Pac(self, current_play.level.maze)
-        # ghost = Ghost(self, current_play.level.maze)
-        # clock = pygame.time.Clock()
 
-        self.current_play = current_play.exists
-        while self.current_play:
+        self.playing = current_play.exists
+        while self.playing:
+            # INPUT EVENTS
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
-
             keys = pygame.key.get_pressed()
 
+            # DRAW
             _ = self.screen.fill((0, 0, 0))
-
             current_play.level.display()
-            cols = pygame.sprite.spritecollide(current_play.level.pac, current_play.level.pellets, True)
+
+            # COLLISIONS
+            cols = pygame.sprite.spritecollide(
+                current_play.level.pac,
+                current_play.level.pellets, True)
             for _ in cols:
                 current_play.score += 20
 
-            dt = current_play.level.clock.tick(60)
-            current_play.level.ghost.update(current_play.level.pac.pos, dt)
-            current_play.level.pac.update(keys, dt)
+            # UPDATE
+            current_play.level.update(keys)
+
+            # DEATH
             while current_play.level.pac.dead and hs.input_isactive:
                 _ = self.screen.fill((0, 0, 0))
                 hs.input_name(pygame.event.get(), current_play.score)
                 hs.draw_input_box(current_play.score)
                 pygame.display.flip()
             pygame.display.flip()
-        # level ends either by death or win
-        # win and last lvl -> input highscore -> menu
-        # win and not last lvl -> update CurrentPlay -> level_loop()
-        # death -> input highscore -> menu
 
     def highscores_loop(self) -> None:
         hs = Highscores(self)

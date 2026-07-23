@@ -1,4 +1,3 @@
-from typing import override
 import pygame
 from pygame.sprite import Sprite
 
@@ -11,9 +10,3 @@ class Pellet(Sprite):
         self.image.fill((0, 255, 0))
         self.rect = self.image.get_rect()
         self.rect.center = ((x * 60) + 30, (y * 60) + 30)
-
-    # @override
-    # def update() -> None:
-    #     # when pac gets on the pellet:
-    #     # self.kill()
-    #     ...

@@ -84,7 +84,7 @@ class Menu:
                        pygame.font.SysFont('comicsans', 20),
                        (0, 0, 255), 75, self.game.WINDOW_HEIGHT - 15)
         # BUTTONS
-        if self.game.current_play is True and self.continu is None:
+        if self.game.playing is True and self.continu is None:
             self.continu = Button(
                 'continu', self.rect.centerx, self.rect.centery,
                 pygame.image.load('assets/continue.png'), 1,
